@@ -14,7 +14,7 @@ int main(void){
 
     for(i=0;i<10;i++){
         for(j=i;j<10;j++){
-            if(atan2(x[i],y[i])>atan2(x[j],y[j])){
+            if(atan2(y[i],x[i])>atan2(y[j],x[j])){
                 tmp=x[i];
                 x[i]=x[j];
                 x[j]=tmp;
@@ -27,8 +27,8 @@ int main(void){
 
     for(i=0;i<10;i++){
         printf("x[%d]=%lf, ",i,x[i]);
-        printf("y[%d]=%lf", ,i,y[i]);
-        printf("atan2()=%lf\n",atan2(x[i],y[i]));
+        printf("y[%d]=%lf, ",i,y[i]);
+        printf("atan2()=%lf\n",atan2(y[i],x[i]));
     }
 
     return 0;
