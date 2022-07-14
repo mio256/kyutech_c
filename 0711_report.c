@@ -103,14 +103,11 @@ void check(int x[][N], int inum, int jnum, int *pcont)
     if (jnum == inum)
     {
         bingo_cnt = 0;
-        for (i = 0; i < 5; i++)
+        for (i = 0, j = 0; i < 5; i++, j++)
         {
-            for (j = 0; j < 5; j++)
+            if (x[i][j] == HOLE)
             {
-                if (x[i][j] == HOLE)
-                {
-                    bingo_cnt++;
-                }
+                bingo_cnt++;
             }
         }
         if (bingo_cnt == 5)
@@ -121,14 +118,11 @@ void check(int x[][N], int inum, int jnum, int *pcont)
     if (jnum + inum == N - 1)
     {
         bingo_cnt = 0;
-        for (i = 0; i < 5; i++)
+        for (i = 0, j = 0; i < 5; i++, j++)
         {
-            for (j = 5; j > 0; j--)
+            if (x[i][j] == HOLE)
             {
-                if (x[i][j] == HOLE)
-                {
-                    bingo_cnt++;
-                }
+                bingo_cnt++;
             }
         }
         if (bingo_cnt == 5)
