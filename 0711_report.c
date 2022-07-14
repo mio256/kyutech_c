@@ -118,7 +118,7 @@ void check(int x[][N], int inum, int jnum, int *pcont)
     if (jnum + inum == N - 1)
     {
         bingo_cnt = 0;
-        for (i = 0, j = 0; i < 5; i++, j++)
+        for (i = 0, j = 5; i < 5; i++, j--)
         {
             if (x[i][j] == HOLE)
             {
