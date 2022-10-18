@@ -6,6 +6,7 @@
         "limits": "c",
         "ratio": "c",
         "algorithm": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "math.h": "c"
     }
 }
