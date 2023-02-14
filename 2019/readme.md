@@ -51,7 +51,10 @@ int main(void)
 5. `double search(double key, double data[], int n)`
 6. `double search(double key, double data[], double n)`
 
-**ans. 4 - `int search(double key, double data[], int n)`**
+
+<details><summary>解答</summary>
+
+**4 - `int search(double key, double data[], int n)`**
 
 > 解説  
 > main関数を見ると`found = search(x, data, 10);`の行でsearch関数が使われています。  
@@ -67,6 +70,8 @@ int main(void)
 > `'1'`→char型（文字）  
 > `"1"`→char*型（文字列）
 
+</details>
+
 ### (2) 空欄B,C,Dに入るプログラムとして適切なものを選択せよ。
 
 1. `left = mid;`
@@ -80,12 +85,16 @@ int main(void)
 9. `return right;`
 10. `return mid;`（10番→0番）
 
-**ans. B-0 `return mid;`**  
+<details><summary>解答</summary>
+
+**B-0 `return mid;`**  
 **C-3 `left = mid + 1;`**  
 **D-5 `right = mid - 1;`**
 
 > 解説  
 > 二分探索法です。
+
+</details>
 
 ## 2. ソート
 
@@ -163,6 +172,9 @@ s1とs2の3つの成績(英語、数学、プログラミング)の合計をそ�
 (c), (d), (e) 関数 isort は、 挿入ソートのアルゴリズムを使って、引数の構造体 SDATAの配列のデータを3つの成績の合計の降順に並べ換える関数である。  
 
 ### (1) 空欄 (a) を埋めよ。
+
+<details><summary>解答</summary>
+
 ```c
 struct SDATA
 {
@@ -172,7 +184,15 @@ struct SDATA
     int prog;
 };
 ```
+
+> (a) 問題文の通りに構造体を宣言します。  
+
+</details>
+
 ### (2) 空欄 (b) を埋めよ。
+
+<details><summary>解答</summary>
+
 ```c
     int sum1, sum2;
     sum1 = s1.eng + s1.math + s1.prog;
@@ -190,15 +210,21 @@ struct SDATA
         return 1;
     }
 ```
+
+> (b) 問題文の通りに関数を定義します、if文は条件式なので`==`を使うことを忘れないでください。  
+
+</details>
+
 (3) 空欄 (c)~(e) を埋めよ。
+
+<details><summary>解答</summary>
+
 ```c
 (c) S[i - 1], ins
 (d) j > 0 && r < 0
 (e) S[j], ins
 ```
 
-> 解説  
-> (a) 問題文の通りに構造体を宣言します。  
-> (b) 問題文の通りに関数を定義します、if文は条件式なので`==`を使うことを忘れないでください。  
 > (c)~(e) 挿入ソートを実装します。moodleであれば試行しながら行えますが、手書きだと厳しいです。しっかりトレースをして確認してください。
 
+</details>
