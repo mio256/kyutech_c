@@ -7,8 +7,8 @@ struct DATA{
 };
 
 int main(void){
-    struct DATA *p_data;
     struct DATA data;
+    struct DATA *p_data;
 
     data.height=190;
     data.weight=65;

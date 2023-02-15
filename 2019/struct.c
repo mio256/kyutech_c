@@ -15,5 +15,7 @@ int main(void){
     top->next->data=3;
     top->next->next=NULL;
 
+    free(top);
+
     return 0;
 }

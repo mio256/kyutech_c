@@ -11,6 +11,7 @@ int static_func(void){
 
 int auto_func(void){
     int c=0;
+    // 自動的変数
     // 関数が終わった後は自動で消す
     c++;
     return c;
