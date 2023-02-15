@@ -50,7 +50,15 @@ double area_polygon(struct VERTEX *p, int n)
     area = 0.0;
 
     /* b */
-    
+    for(i=n;i>=3;i--){
+        t[1]=p[i-1];
+        t[2]=p[i-2];
+        print_vertex(t[0]);
+        print_vertex(t[1]);
+        print_vertex(t[2]);
+        printf("\n");
+        area+=area_triangle(t);
+    }
 
     return area;
 }

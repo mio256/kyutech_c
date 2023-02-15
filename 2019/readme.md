@@ -492,10 +492,129 @@ n角形の面積を求めるアルゴリズム
 4. 全ての三角形の面積を合計する
 ```
 
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+struct VERTEX
+{
+    double x, y;
+};
+
+void print_vertex(struct VERTEX v)
+{
+    printf("(%4.1f, %4.1f) ", v.x, v.y);
+}
+
+void print_vertexes(struct VERTEX *p, int n)
+{
+    int i;
+    for (i = 0; i < n; ++i)
+    {
+        print_vertex(p[i]);
+    }
+    printf("\n");
+}
+
+double area_triangle(struct VERTEX *p)
+{
+    double a, b, c, s, area;
+
+    a = sqrt(pow(p[0].x - p[1].x, 2.0) + pow(p[0].y - p[1].y, 2.0));
+    b = sqrt(pow(p[1].x - p[2].x, 2.0) + pow(p[1].y - p[2].y, 2.0));
+    c = sqrt(pow(p[2].x - p[0].x, 2.0) + pow(p[2].y - p[0].y, 2.0));
+
+    /* a */
+
+    return area;
+}
+
+double area_polygon(struct VERTEX *p, int n)
+{
+    struct VERTEX t[3];
+    int i;
+    double area;
+    if (n < 3)
+        return 0.0;
+    if (n == 3)
+        return area_triangle(p);
+    t[0] = p[0];
+    area = 0.0;
+
+    /* b */
+
+    return area;
+}
+
+int main(void)
+{
+    struct VERTEX triangle[] = {
+        {0.0, 0.0},
+        {10.0, 0.0},
+        {0.0, 10.0}};
+    struct VERTEX house[] = {
+        {10.0, 0.0},
+        {10.0, 10.0},
+        {5.0, 15.0},
+        {0.0, 10.0}};
+    int i;
+
+    printf("triangle:");
+    print_vertexes(triangle, 3);
+
+    printf("area = %5.1f\n", area_polygon(triangle, 3));
+
+    printf("house:");
+    print_vertexes(house, 5);
+
+    printf("area = %5.1f\n", area_polygon(house, 5));
+
+    return 0;
+}
+```
+
 ### (1)
 
 空欄(a)を埋めて関数area_triangle()を完成させなさい。
 
-```c
 
+<details><summary>解答</summary>
+
+```c
+s = (a + b + c) / 2;
+area = sqrt(s * (s - a) * (s - b) * (s - c));
 ```
+
+</details>
+
+### (2)
+
+プログラム中の house の図形に関して、三角形に分割された状況を各頂点との関係が分るように図示しなさい。
+
+<details><summary>解答</summary>
+
+![](./5_1.JPG)
+
+</details>
+
+### (3)
+
+空欄(b)を埋めて関数area_polygon()を完成させなさい。
+
+
+<details><summary>解答</summary>
+
+```c
+for(i=n;i>=3;i--){
+    t[1]=p[i-1];
+    t[2]=p[i-2];
+    print_vertex(t[0]);
+    print_vertex(t[1]);
+    print_vertex(t[2]);
+    printf("\n");
+    area+=area_triangle(t);
+}
+```
+
+</details>
