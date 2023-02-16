@@ -18,8 +18,11 @@ int main(void){
 
     p_data=&data;
 
-    printf("p_data.height=%d\n",p_data->height);
-    printf("p_data.weight=%d\n",p_data->weight);
+    printf("p_data height=%d\n",(*p_data).height);
+    printf("p_data weight=%d\n",(*p_data).weight);
+
+    printf("p_data->height=%d\n",p_data->height);
+    printf("p_data->weight=%d\n",p_data->weight);
 
     return 0;
 }
