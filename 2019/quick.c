@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#define N 10
+
 /* 配列の要素を交換する */
 void swap(int x[], int i, int j)
 {
@@ -39,6 +41,7 @@ void qsort(int x[], int left, int right)
 
         while (pivot < x[j]) /* pivot より小さい値が */
             j--;             /*  出るまで j を減少させる */
+        
         if (i >= j)          /* i >= j なら */
             break;           /* 無限ループから抜ける */
 
@@ -56,17 +59,16 @@ void qsort(int x[], int left, int right)
 
 int main(void)
 { /* ソートする配列 */
-    int x[] = {6, 3, 1, 7, 0, 4, 8, 5, 2, 9};
-    int n = 10;
+    int x[N] = {6, 3, 1, 7, 0, 4, 8, 5, 2, 9};
 
     printf("ソート前:\n");
-    showdata(x, n);
+    showdata(x, N);
 
     printf("ソート中:\n");
-    qsort(x, 0, n - 1);
+    qsort(x, 0, N - 1);
 
     printf("ソート後:\n");
-    showdata(x, n);
+    showdata(x, N);
 
     return 0;
 }
