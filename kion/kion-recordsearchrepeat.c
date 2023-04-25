@@ -28,6 +28,7 @@ int readfile(char filename[], struct kisyou array[], int amax)
     /* ファイルの最後 EOF(End of File) までの読み込み */
     while (fscanf(fp, "%d,%d,%d,%lf", &month, &day, &hour, &data) != EOF)
     {
+        /* month, day, hourは読み取ったが今回は使用しない */
         if (size >= amax)
         {
             fprintf(stderr, "Error: 配列の容量が不足しています。\n");
@@ -46,7 +47,7 @@ int readfile(char filename[], struct kisyou array[], int amax)
     return size; /* 読み込んだデータ数を返す */
 }
 
-/* 一つにまとめられた構造体データを関数に渡す */
+/* レコードデータの出力 */
 void printrecord(struct kisyou record)
 {
     printf("%d月%d日%d時 %.1f\n", /* 構造体のメンバを出力 */
@@ -55,14 +56,15 @@ void printrecord(struct kisyou record)
 
 #define MAXFILENAME 100 /* ファイル名の最大長 */
 
-/* 実験のため配列のサイズを少し小さく */
-#define ARRAYSIZE 1000
+/* １年間のデータを読み込めるように */
+#define ARRAYSIZE 10000
 
 int main(void)
 {
     char filename[MAXFILENAME];
-    struct kisyou kisyoudata[ARRAYSIZE]; /* 構造体の配列を追加 */
+    struct kisyou kisyoudata[ARRAYSIZE]; /* レコードに対応した構造体の配列 */
     int size;                            /* 配列に読み込まれたデータ数 */
+    int month, day;
     int i;
 
     fprintf(stderr, "データファイル名：");
@@ -70,11 +72,25 @@ int main(void)
 
     size = readfile(filename, kisyoudata, ARRAYSIZE);
 
-    /* 配列に読み込まれたデータの出力処理 */
-    for (i = 0; i < size; i++)
-    {
-        /* 構造体：単純に１つのレコードを渡す */
-        printrecord(kisyoudata[i]);
+    while (1)
+    { /* or for (;;) */
+        fprintf(stderr, "月日：");
+        scanf("%d %d", &month, &day); /* 端末から月日を入力 */
+
+        if (month == 0)
+        { /* 月に0を指定すると終了させる */
+            fprintf(stderr, "検索を終了します。\n");
+            break; /* or exit(0) */
+        }
+
+        /* 配列に読み込まれたデータの検索処理 */
+        for (i = 0; i < size; i++)
+        {
+            if (kisyoudata[i].month == month && kisyoudata[i].day == day)
+            {
+                printrecord(kisyoudata[i]);
+            }
+        }
     }
 
     return 0;

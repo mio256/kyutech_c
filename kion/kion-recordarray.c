@@ -1,16 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct kisyou
-{ /* 気温データを管理するレコード */
-    int month;
-    int day;
-    int hour;
-    double kion;
-};
-
 /* ファイルの内容を構造体の配列に記録しデータ数を返す */
-int readfile(char filename[], struct kisyou array[], int amax)
+int readfile(char filename[], int amonth[], int aday[], int ahour[], double kion[], int amax)
 {
     FILE *fp;
     int month, day, hour;
@@ -33,11 +25,11 @@ int readfile(char filename[], struct kisyou array[], int amax)
             fprintf(stderr, "Error: 配列の容量が不足しています。\n");
             exit(2);
         }
-        /* すべてのデータを構造体のメンバに保存 */
-        array[size].month = month;
-        array[size].day = day;
-        array[size].hour = hour;
-        array[size].kion = data;
+        /* すべてのデータを配列に保存 */
+        amonth[size] = month;
+        aday[size] = day;
+        ahour[size] = hour;
+        kion[size] = data;
         size++; /* 次に値を格納する位置の添字に更新 */
     }
 
@@ -46,11 +38,10 @@ int readfile(char filename[], struct kisyou array[], int amax)
     return size; /* 読み込んだデータ数を返す */
 }
 
-/* 一つにまとめられた構造体データを関数に渡す */
-void printrecord(struct kisyou record)
+/* ひとかたまりのデータだがデータを個別に関数に渡す */
+void printrecord(int d1, int d2, int d3, double v)
 {
-    printf("%d月%d日%d時 %.1f\n", /* 構造体のメンバを出力 */
-           record.month, record.day, record.hour, record.kion);
+    printf("%d月%d日%d時 %.1f\n", d1, d2, d3, v);
 }
 
 #define MAXFILENAME 100 /* ファイル名の最大長 */
@@ -61,20 +52,22 @@ void printrecord(struct kisyou record)
 int main(void)
 {
     char filename[MAXFILENAME];
-    struct kisyou kisyoudata[ARRAYSIZE]; /* 構造体の配列を追加 */
-    int size;                            /* 配列に読み込まれたデータ数 */
-    int i;
+    /* 月、日、時刻を記録する配列を追加 */
+    int montharray[ARRAYSIZE], dayarray[ARRAYSIZE], hourarray[ARRAYSIZE];
+    double kion[ARRAYSIZE];
+    int size, i;
 
     fprintf(stderr, "データファイル名：");
     scanf("%s", filename); /* 端末からファイル名を入力 */
 
-    size = readfile(filename, kisyoudata, ARRAYSIZE);
+    size = readfile(filename, montharray, dayarray, hourarray,
+                    kion, ARRAYSIZE);
 
-    /* 配列に読み込まれたデータの出力処理 */
     for (i = 0; i < size; i++)
     {
-        /* 構造体：単純に１つのレコードを渡す */
-        printrecord(kisyoudata[i]);
+        /* 複数配列：配列の数や順番に注意．．．要素が増えると？ */
+        printrecord(montharray[i], dayarray[i], hourarray[i],
+                    kion[i]);
     }
 
     return 0;

@@ -46,7 +46,7 @@ int readfile(char filename[], struct kisyou array[], int amax)
     return size; /* 読み込んだデータ数を返す */
 }
 
-/* 一つにまとめられた構造体データを関数に渡す */
+/* レコードデータの出力 */
 void printrecord(struct kisyou record)
 {
     printf("%d月%d日%d時 %.1f\n", /* 構造体のメンバを出力 */
@@ -61,8 +61,9 @@ void printrecord(struct kisyou record)
 int main(void)
 {
     char filename[MAXFILENAME];
-    struct kisyou kisyoudata[ARRAYSIZE]; /* 構造体の配列を追加 */
+    struct kisyou kisyoudata[ARRAYSIZE]; /* レコードに対応した構造体の配列 */
     int size;                            /* 配列に読み込まれたデータ数 */
+    int month, day;
     int i;
 
     fprintf(stderr, "データファイル名：");
@@ -70,11 +71,16 @@ int main(void)
 
     size = readfile(filename, kisyoudata, ARRAYSIZE);
 
-    /* 配列に読み込まれたデータの出力処理 */
+    fprintf(stderr, "月日：");
+    scanf("%d %d", &month, &day); /* 端末から月日を入力 */
+
+    /* 配列に読み込まれたデータの検索処理 */
     for (i = 0; i < size; i++)
     {
-        /* 構造体：単純に１つのレコードを渡す */
-        printrecord(kisyoudata[i]);
+        if (kisyoudata[i].month == month && kisyoudata[i].day == day)
+        {
+            printrecord(kisyoudata[i]);
+        }
     }
 
     return 0;
