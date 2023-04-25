@@ -39,10 +39,7 @@ int main(void)
                 fprintf(stderr, "検索を終了します。\n") ;
                 break ; /* or exit(0) */
     }
-    * /
-        /* ここに検索用のコードを書く */
-        fprintf(stderr, "%d月%d日\n", month, day);
-}
-
-return 0;
+    /* ここに検索用のコードを書く */
+    fprintf(stderr, "%d月%d日\n", month, day);
+    return 0;
 }
