@@ -102,7 +102,6 @@ int main(void)
     struct kisyou kisyoudata[ARRAYSIZE]; /* 構造体の配列を追加 */
     double kion[DAYARRAY];
     int size; /* 配列に読み込まれたデータ数 */
-    int month, day;
     int i, di;
 
     fprintf(stderr, "データファイル名：");
@@ -110,33 +109,20 @@ int main(void)
 
     size = readfile(filename, kisyoudata, ARRAYSIZE);
 
-    while (1)
-    { /* or for (;;) */
-        fprintf(stderr, "月日：");
-        scanf("%d %d", &month, &day); /* 端末から月日を入力 */
-
-        if (month == 0)
-        { /* 月に0を指定すると終了させる */
-            fprintf(stderr, "検索を終了します。\n");
-            break; /* or exit(0) */
-        }
-
-        /* 配列に読み込まれたデータの検索処理 */
-        di = 0;
-        for (i = 0; i < size; i++)
+    /* 一日ごとの気温の統計値の出力 */
+    for (i = 0; i < size; i += DAYARRAY)
+    { /* 一日単位で処理 */
+        for (di = 0; di < DAYARRAY; di++)
         {
-            if (kisyoudata[i].month == month && kisyoudata[i].day == day)
-            {
-                /* 統計計算用の配列に転記 */
-                kion[di] = kisyoudata[i].kion;
-                di++;
-            }
+            /* １日分の気温を統計計算用の配列に転記 */
+            kion[di] = kisyoudata[i + di].kion;
         }
 
-        printf("%d月%d日: %.1f, %.1f, %.1f\n", month, day,
-               kion_heikin(kion, di),
-               kion_max(kion, di),
-               kion_min(kion, di));
+        printf("%d月%d日: %.1f, %.1f, %.1f\n",
+               kisyoudata[i].month, kisyoudata[i].day,
+               kion_heikin(kion, DAYARRAY),
+               kion_max(kion, DAYARRAY),
+               kion_min(kion, DAYARRAY));
     }
 
     return 0;

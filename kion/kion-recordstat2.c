@@ -122,21 +122,22 @@ int main(void)
         }
 
         /* 配列に読み込まれたデータの検索処理 */
-        di = 0;
-        for (i = 0; i < size; i++)
-        {
+        for (i = 0; i < size; i += DAYARRAY)
+        { /* 一日単位でレコードを検索 */
             if (kisyoudata[i].month == month && kisyoudata[i].day == day)
             {
-                /* 統計計算用の配列に転記 */
-                kion[di] = kisyoudata[i].kion;
-                di++;
+                /* １日分の気温を統計計算用の配列に転記 */
+                for (di = 0; di < DAYARRAY; di++)
+                {
+                    kion[di] = kisyoudata[i + di].kion;
+                }
+                printf("%d月%d日: %.1f, %.1f, %.1f\n", month, day,
+                       kion_heikin(kion, DAYARRAY),
+                       kion_max(kion, DAYARRAY),
+                       kion_min(kion, DAYARRAY));
+                break; /* これ以降は検索をしても意味がない */
             }
         }
-
-        printf("%d月%d日: %.1f, %.1f, %.1f\n", month, day,
-               kion_heikin(kion, di),
-               kion_max(kion, di),
-               kion_min(kion, di));
     }
 
     return 0;

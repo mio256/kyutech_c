@@ -90,54 +90,66 @@ int readfile(char filename[], struct kisyou array[], int amax)
     return size; /* 読み込んだデータ数を返す */
 }
 
+#define DAYARRAY 24
+
+void html_report(struct kisyou array[], int size)
+{
+    double kion[DAYARRAY];
+    int i, di;
+
+    /* HTMLのヘッダー部分 */
+    printf("<HTML>\n<HEAD>\n");
+    printf("<TITLE>気温データ</TITLE>\n");
+    printf("</HEAD>\n");
+    /* 文書の本体の開始 */
+    printf("<BODY>\n");
+    /* 見出しの表示 */
+    printf("<H1>日別気温統計データ</H1>\n");
+    /* 表のヘッダー部分の開始 */
+    printf("<TABLE border=1>\n");
+    printf("<TR><TH>月日</TH><TH>平均</TH><TH>最高</TH><TH>最低</TH></TR>\n");
+
+    /* 表の本体部分の出力 */
+    for (i = 0; i < size; i += DAYARRAY)
+    { /* 一日単位で処理 */
+        for (di = 0; di < DAYARRAY; di++)
+        {
+            /* １日分の気温を統計計算用の配列に転記 */
+            kion[di] = array[i + di].kion;
+        }
+
+        /* 表の本体の１行出力 */
+        printf("<TR><TD>%d月%d日</TD><TD>%.1f</TD><TD>%.1f</TD><TD>%.1f</TD></TR>\n",
+               array[i].month, array[i].day,
+               kion_heikin(kion, DAYARRAY),
+               kion_max(kion, DAYARRAY),
+               kion_min(kion, DAYARRAY));
+    }
+
+    printf("</TABLE>\n"); /* 表の終端 */
+    printf("</BODY>\n");  /* 文書本体の終端 */
+    printf("</HTML>\n");  /* HTMLの終端 */
+}
+
 #define MAXFILENAME 100 /* ファイル名の最大長 */
 
 /* １年間のデータを読み込めるように */
 #define ARRAYSIZE 10000
-#define DAYARRAY 24
 
 int main(void)
 {
     char filename[MAXFILENAME];
     struct kisyou kisyoudata[ARRAYSIZE]; /* 構造体の配列を追加 */
-    double kion[DAYARRAY];
-    int size; /* 配列に読み込まれたデータ数 */
-    int month, day;
-    int i, di;
+    int size;                            /* 配列に読み込まれたデータ数 */
+    int i;
 
     fprintf(stderr, "データファイル名：");
     scanf("%s", filename); /* 端末からファイル名を入力 */
 
     size = readfile(filename, kisyoudata, ARRAYSIZE);
 
-    while (1)
-    { /* or for (;;) */
-        fprintf(stderr, "月日：");
-        scanf("%d %d", &month, &day); /* 端末から月日を入力 */
-
-        if (month == 0)
-        { /* 月に0を指定すると終了させる */
-            fprintf(stderr, "検索を終了します。\n");
-            break; /* or exit(0) */
-        }
-
-        /* 配列に読み込まれたデータの検索処理 */
-        di = 0;
-        for (i = 0; i < size; i++)
-        {
-            if (kisyoudata[i].month == month && kisyoudata[i].day == day)
-            {
-                /* 統計計算用の配列に転記 */
-                kion[di] = kisyoudata[i].kion;
-                di++;
-            }
-        }
-
-        printf("%d月%d日: %.1f, %.1f, %.1f\n", month, day,
-               kion_heikin(kion, di),
-               kion_max(kion, di),
-               kion_min(kion, di));
-    }
+    /* ここからHTMLの出力 */
+    html_report(kisyoudata, size);
 
     return 0;
 }

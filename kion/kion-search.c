@@ -1,50 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* 配列で渡された気温の平均値を求めて返す */
-double kion_heikin(double array[], int size)
-{
-    int i;
-    double sum = 0.0;
-
-    for (i = 0; i < size; i++)
-    {
-        sum += array[i];
-    }
-
-    return sum / size;
-}
-
-/* 配列で渡された気温の最大値を求めて返す */
-double kion_max(double array[], int size)
-{
-    int i;
-    double vmax = array[0]; /* 最大値の候補 */
-
-    for (i = 1; i < size; i++)
-    {
-        if (array[i] > vmax) /* 最大値の候補よりも大きい値 */
-            vmax = array[i]; /* その値で最大値の候補を更新する */
-    }
-
-    return vmax;
-}
-
-/* 配列で渡された気温の最小値を求めて返す */
-double kion_min(double array[], int size)
-{
-    int i;
-    double vmin = array[0];
-
-    for (i = 1; i < size; i++)
-    {
-        if (array[i] < vmin)
-            vmin = array[i];
-    }
-
-    return vmin;
-}
-
 struct kisyou
 { /* 気温データを管理するレコード */
     int month;
@@ -90,20 +46,25 @@ int readfile(char filename[], struct kisyou array[], int amax)
     return size; /* 読み込んだデータ数を返す */
 }
 
+/* レコードデータの出力 */
+void printrecord(struct kisyou record)
+{
+    printf("%d月%d日%d時 %.1f\n", /* 構造体のメンバを出力 */
+           record.month, record.day, record.hour, record.kion);
+}
+
 #define MAXFILENAME 100 /* ファイル名の最大長 */
 
 /* １年間のデータを読み込めるように */
 #define ARRAYSIZE 10000
-#define DAYARRAY 24
 
 int main(void)
 {
     char filename[MAXFILENAME];
     struct kisyou kisyoudata[ARRAYSIZE]; /* 構造体の配列を追加 */
-    double kion[DAYARRAY];
-    int size; /* 配列に読み込まれたデータ数 */
-    int month, day;
-    int i, di;
+    int size;                            /* 配列に読み込まれたデータ数 */
+    double hkion, lkion, tmp;
+    int i;
 
     fprintf(stderr, "データファイル名：");
     scanf("%s", filename); /* 端末からファイル名を入力 */
@@ -112,31 +73,30 @@ int main(void)
 
     while (1)
     { /* or for (;;) */
-        fprintf(stderr, "月日：");
-        scanf("%d %d", &month, &day); /* 端末から月日を入力 */
+        fprintf(stderr, "\n気温範囲：");
+        scanf("%lf %lf", &hkion, &lkion); /* 端末から気温の範囲を入力 */
 
-        if (month == 0)
-        { /* 月に0を指定すると終了させる */
+        if (hkion == 100.0)
+        { /* １つめの気温に100を指定すると終了させる */
             fprintf(stderr, "検索を終了します。\n");
             break; /* or exit(0) */
         }
 
-        /* 配列に読み込まれたデータの検索処理 */
-        di = 0;
-        for (i = 0; i < size; i++)
-        {
-            if (kisyoudata[i].month == month && kisyoudata[i].day == day)
-            {
-                /* 統計計算用の配列に転記 */
-                kion[di] = kisyoudata[i].kion;
-                di++;
-            }
+        if (hkion < lkion)
+        { /* 気温の指定が逆のときは入れ替える */
+            tmp = hkion;
+            hkion = lkion;
+            lkion = tmp;
         }
 
-        printf("%d月%d日: %.1f, %.1f, %.1f\n", month, day,
-               kion_heikin(kion, di),
-               kion_max(kion, di),
-               kion_min(kion, di));
+        /* 配列に読み込まれたデータの検索処理 */
+        for (i = 0; i < size; i++)
+        {
+            if (kisyoudata[i].kion <= hkion && kisyoudata[i].kion >= lkion)
+            {
+                printrecord(kisyoudata[i]);
+            }
+        }
     }
 
     return 0;
