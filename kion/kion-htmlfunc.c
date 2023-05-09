@@ -92,6 +92,7 @@ int readfile(char filename[], struct kisyou array[], int amax)
 
 #define DAYARRAY 24
 
+/* HTMLによる気温表の出力 */
 void html_report(struct kisyou array[], int size)
 {
     double kion[DAYARRAY];
@@ -141,14 +142,14 @@ int main(void)
     char filename[MAXFILENAME];
     struct kisyou kisyoudata[ARRAYSIZE]; /* 構造体の配列を追加 */
     int size;                            /* 配列に読み込まれたデータ数 */
-    int i;
 
     fprintf(stderr, "データファイル名：");
     scanf("%s", filename); /* 端末からファイル名を入力 */
 
+    /* データファイルの読み込み */
     size = readfile(filename, kisyoudata, ARRAYSIZE);
 
-    /* ここからHTMLの出力 */
+    /* 統計データのHTML整形出力 */
     html_report(kisyoudata, size);
 
     return 0;
