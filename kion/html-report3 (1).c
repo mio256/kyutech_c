@@ -11,6 +11,7 @@ void html_report(struct kisyou array[], int size)
     double kion[DAYARRAY] ;
     int i, di ;
     double vmax, vmin ;
+    char *str ;
 
     /* HTMLのヘッダー部分 */
     printf("<HTML>\n<HEAD>\n") ;
@@ -33,8 +34,15 @@ void html_report(struct kisyou array[], int size)
 
 	vmax = kion_max(kion, DAYARRAY) ;
 	vmin = kion_min(kion, DAYARRAY) ;
+
+	if (vmax - vmin >= 15) {
+	    str = " bgcolor=red" ;
+	} else {
+	    str = "" ;
+	}
 	/* 表の本体の１行出力 */
-	printf("<TR><TD>%d月%d日</TD><TD>%.1f</TD><TD>%.1f</TD><TD>%.1f</TD><TD>%.1f</TD></TR>\n",
+	printf("<TR%s><TD>%d月%d日</TD><TD>%.1f</TD><TD>%.1f</TD><TD>%.1f</TD><TD>%.1f</TD></TR>\n",
+			str,
 			array[i].month, array[i].day, 
 			kion_heikin(kion, DAYARRAY),
 			vmax,
