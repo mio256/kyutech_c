@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h> /* exit関数用に追加 */
 
 #include "kion-htmlreport.h"
 #include "kionstat.h"
@@ -9,17 +9,16 @@
 /* HTMLによる気温表の出力 */
 void html_report(struct kisyou array[], int size)
 {
-    FILE *fp;
+    FILE *fp; /* ファイル出力用に追加 */
     double kion[DAYARRAY];
     int i, di;
     double vmax, vmin;
-    double max, min, range;
     char *str;
-    char filename[] = "report.html";
+    char filename[] = "report.html"; /* ファイル名の指定 */
 
     if ((fp = fopen(filename, "w")) == NULL)
     {
-        fprintf(stderr, "Error: %s\n", filename);
+        fprintf(stderr, "Error: 出力ファイルのオープンエラー - %s\n", filename);
         exit(1);
     }
 
@@ -44,32 +43,30 @@ void html_report(struct kisyou array[], int size)
             kion[di] = array[i + di].kion;
         }
 
-        max = kion_max(kion, DAYARRAY);
-        min = kion_max(kion, DAYARRAY);
-        range = max = min;
+        vmax = kion_max(kion, DAYARRAY);
+        vmin = kion_min(kion, DAYARRAY);
 
-        /* 表の本体の１行出力 */
-        if (range >= 15)
+        if (vmax - vmin >= 15)
         {
-            fprintf(fp, "<TR><TD>%d月%d日</TD><TD>%.1f</TD><TD>%.1f</TD><TD>%.1f</TD><TD bgcolor=red>%.1f</TD></TR>\n",
-                    array[i].month, array[i].day,
-                    kion_heikin(kion, DAYARRAY),
-                    max,
-                    min,
-                    range);
+            str = " bgcolor=red";
         }
         else
         {
-            fprintf(fp, "<TR><TD>%d月%d日</TD><TD>%.1f</TD><TD>%.1f</TD><TD>%.1f</TD><TD>%.1f</TD></TR>\n",
-                    array[i].month, array[i].day,
-                    kion_heikin(kion, DAYARRAY),
-                    max,
-                    min,
-                    range);
+            str = "";
         }
+        /* 表の本体の１行出力 */
+        fprintf(fp, "<TR%s><TD>%d月%d日</TD><TD>%.1f</TD><TD>%.1f</TD><TD>%.1f</TD><TD>%.1f</TD></TR>\n",
+                str,
+                array[i].month, array[i].day,
+                kion_heikin(kion, DAYARRAY),
+                vmax,
+                vmin,
+                vmax - vmin);
     }
 
     fprintf(fp, "</TABLE>\n"); /* 表の終端 */
     fprintf(fp, "</BODY>\n");  /* 文書本体の終端 */
     fprintf(fp, "</HTML>\n");  /* HTMLの終端 */
+
+    fclose(fp);
 }
