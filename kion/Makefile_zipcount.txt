@@ -1,0 +1,2 @@
+zipcoun: zipcount_main.c zipcount_func.c zipcount.h
+    gcc -o zipcount zipcount_main.c zipcount_func.c zipcount.h
