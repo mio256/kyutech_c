@@ -1,0 +1,14 @@
+zipcount: zipcount-main.o zipcount-sub.o
+	cc -o zipcount zipcount-main.o zipcount-sub.o
+
+zipcount-main.o: zipcount-main.c zipcount.h
+	cc -c zipcount-main.c
+
+zipcount-sub.o: zipcount-sub.c zipcount.h
+	cc -c zipcount-sub.c
+
+test: zipcount
+	./zipcount
+
+clean:
+	rm -f zipcount *.o a.out *~
