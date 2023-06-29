@@ -1,13 +1,18 @@
 #define TRUE 1
 #define FALSE 0
 
-#define MAXSTACK 100
+/* スタックの利用者は、この構造体の中身を直接操作してはならない */
+typedef struct node
+{
+    struct node *next;
+    int value;
+} NODE;
 
 /* スタックの利用者は、この構造体の中身を直接操作してはならない */
 typedef struct stack
 {
-    int data[MAXSTACK];
-    int index;
+    NODE *root;
+    int num; /* スタックに記録されているデータ数 */
 } STACK;
 
 STACK *newStack(void);

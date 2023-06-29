@@ -3,41 +3,41 @@
 
 STACK *newStack(void)
 {
-    STACK *sp ;
+    STACK *sp;
 
-    sp = (STACK *)malloc(sizeof(STACK)) ;
-    sp->index = 0 ;
+    sp = (STACK *)malloc(sizeof(STACK));
+    sp->index = 0;
 
-    return sp ;
+    return sp;
 }
 
 void stackPush(STACK *sp, int v)
 {
-    sp->data[sp->index++] = v ;
+    sp->data[sp->index++] = v;
 }
 
 int stackPop(STACK *sp)
 {
-    return sp->data[--sp->index] ;
+    return sp->data[--sp->index];
 }
 
 int stackElement(STACK *sp)
 {
-    return sp->index ;
+    return sp->index;
 }
 
 int stackIsEmpty(STACK *sp)
 {
-    if (sp->index == 0)
-        return TRUE ;
+    if (sp->index <= 0)
+        return TRUE;
     else
-        return FALSE ;
+        return FALSE;
 }
 
 int stackIsFull(STACK *sp)
 {
     if (sp->index >= MAXSTACK)
-        return TRUE ;
+        return TRUE;
     else
-        return FALSE ;
+        return FALSE;
 }
