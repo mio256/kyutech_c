@@ -4,12 +4,11 @@
 
 #include "wordcount.h"
 
-#define MAXWORD 10000
+#define MAXWORD 30000
 
 /* WORDCOUNTを配列を利用して複数記録できるようにする */
 WORDCOUNT WordCount[MAXWORD];
-int WordNum;	 /* 記録されている単語の数 */
-int WordCurrent; /* 次に取り出すWORDCOUNTのインデックス */
+int WordNum;
 
 /* 初期化 */
 void wordcountInit(void)
@@ -57,34 +56,13 @@ void wordcountRegister(char *word)
 	}
 }
 
-/* 最初の単語のデータを取得 */
-WORDCOUNT *wordcountGetFirst(void)
+/* すべての単語と出現回数の表示 */
+void wordcountStatistics(void)
 {
-	WordCurrent = 0;
+	int i;
 
-	if (WordCurrent < WordNum)
-		return &WordCount[WordCurrent++];
-	else
-		return NULL;
-}
-
-/* 次の単語のデータを取得 */
-WORDCOUNT *wordcountGetNext(void)
-{
-	if (WordCurrent < WordNum)
-		return &WordCount[WordCurrent++];
-	else
-		return NULL;
-}
-
-/* WORDCOUNTから単語を取得 */
-char *wcGetWord(WORDCOUNT *wcp)
-{
-	return wcp->word;
-}
-
-/* WORDCOUNTから単語の出現回数を取得 */
-int wcGetCount(WORDCOUNT *wcp)
-{
-	return wcp->count;
+	for (i = 0; i < WordNum; i++)
+	{
+		printf("%5d: %s\n", WordCount[i].count, WordCount[i].word);
+	}
 }

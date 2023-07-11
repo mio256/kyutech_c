@@ -8,7 +8,6 @@ int main(int argc, char *argv[])
 {
     FILE *fp;
     char buff[MAXWORDSIZE];
-    WORDCOUNT *wcp;
     int i;
 
     if (argc != 2)
@@ -30,7 +29,7 @@ int main(int argc, char *argv[])
     {
         /* すべての英大文字を英子文字に変換 */
         for (i = 0; buff[i] != '\0'; i++)
-            buff[i] = tolower((unsigned char)buff[i]);
+            buff[i] = tolower((unsigned)buff[i]);
 
         /* 単語を登録もしくは出現回数を更新 */
         wordcountRegister(buff);
@@ -38,11 +37,7 @@ int main(int argc, char *argv[])
 
     fclose(fp);
 
-    /* 登録されている単語の出現回数を表示 */
-    for (wcp = wordcountGetFirst(); wcp != NULL; wcp = wordcountGetNext())
-    {
-        printf("%5d: %s\n", wcGetCount(wcp), wcGetWord(wcp));
-    }
+    wordcountStatistics();
 
     return 0;
 }
