@@ -4,103 +4,66 @@
 
 #include "wordcount.h"
 
+/* WORDCOUNTを連結リストを利用して複数記録できるようにする */
 typedef struct wordcountlist
 {
-	struct wordcountlist *next;
-	WORDCOUNT info;
+    struct wordcountlist *next;
+    WORDCOUNT info; /* 配列版の構造体と共通 */
 } WORDCOUNTLIST;
 
 WORDCOUNTLIST *root;
-WORDCOUNTLIST *WCLCurrent;
 
 /* 初期化 */
 void wordcountInit(void)
 {
-	root = (WORDCOUNTLIST *)malloc(sizeof(WORDCOUNTLIST));
-	root->next = NULL;
-	WCLCurrent = root;
+    root = NULL;
 }
 
 /* 単語の検索 */
 WORDCOUNT *wordcountSearch(char *word)
 {
-	WORDCOUNTLIST *wcl;
+    WORDCOUNTLIST *wcl;
 
-	wcl = root;
+    for (wcl = root; wcl != NULL; wcl = wcl->next)
+    {
+        /* 単語が既に記録されていたらそのアドレスを返す */
+        if (strcmp(word, wcl->info.word) == 0)
+            return &(wcl->info);
+    }
 
-	while (wcl->next != NULL)
-	{
-		/* 単語が既に記録されていたらそのアドレスを返す */
-		if (strcmp(word, wcl->next->info.word) == 0)
-			return &(wcl->next->info);
-
-		wcl = wcl->next;
-	}
-
-	return NULL;
+    return NULL;
 }
 
 /* 単語の登録 */
 void wordcountRegister(char *word)
 {
-	WORDCOUNT *id;
-	WORDCOUNTLIST *wcl;
+    WORDCOUNT *id;
+    WORDCOUNTLIST *wcl;
 
-	if ((id = wordcountSearch(word)) != NULL)
-	{
-		/* 単語が見つかったら出現回数を更新 */
-		id->count++;
-	}
-	else
-	{
-		wcl = (WORDCOUNTLIST *)malloc(sizeof(WORDCOUNTLIST));
-		strcpy(wcl->info.word, word);
-		wcl->info.count = 1;
-		wcl->next = root->next;
-		root->next = wcl;
-	}
+    if ((id = wordcountSearch(word)) != NULL)
+    {
+        /* 単語が見つかったら出現回数を更新 */
+        id->count++;
+    }
+    else
+    {
+        /* 単語が見つからなければ新規登録 */
+        wcl = (WORDCOUNTLIST *)malloc(sizeof(WORDCOUNTLIST));
+        strcpy(wcl->info.word, word);
+        wcl->info.count = 1;
+
+        wcl->next = root;
+        root = wcl;
+    }
 }
 
-/* 最初の単語のデータを取得 */
-WORDCOUNT *wordcountGetFirst(void)
+/* すべての単語と出現回数の表示 */
+void wordcountStatistics(void)
 {
-	WORDCOUNT *wcp;
-	WCLCurrent = root;
+    WORDCOUNTLIST *wcl;
 
-	if (WCLCurrent->next != NULL)
-	{
-		WCLCurrent = WCLCurrent->next;
-		wcp = &(WCLCurrent->info);
-		return wcp;
-	}
-	else
-	{
-		return NULL;
-	}
-}
-
-/* 次の単語のデータを取得 */
-WORDCOUNT *wordcountGetNext(void)
-{
-	WORDCOUNT *wcp;
-	if (WCLCurrent->next != NULL)
-	{
-		WCLCurrent = WCLCurrent->next;
-		wcp = &(WCLCurrent->info);
-		return wcp;
-	}
-	else
-		return NULL;
-}
-
-/* WORDCOUNTから単語を取得 */
-char *wcGetWord(WORDCOUNT *wcp)
-{
-	return wcp->word;
-}
-
-/* WORDCOUNTから単語の出現回数を取得 */
-int wcGetCount(WORDCOUNT *wcp)
-{
-	return wcp->count;
+    for (wcl = root; wcl != NULL; wcl = wcl->next)
+    {
+        printf("%5d: %s\n", wcl->info.count, wcl->info.word);
+    }
 }
