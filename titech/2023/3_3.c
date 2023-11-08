@@ -70,7 +70,7 @@ int levenshtein(char s1[], char s2[], int s1_len, int s2_len)
     i--;
     j--;
 
-    return mat[i][j]; // キ 17
+    return mat[i][j]; // セ 17
 }
 
 int main(void)
